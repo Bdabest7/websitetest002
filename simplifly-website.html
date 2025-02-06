@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplifly | Professional Drone Services</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            min-height: 110vh;
+            background: linear-gradient(
+                rgba(255, 255, 255, 0.97), 
+                rgba(255, 255, 255, 0.50)
+            ), url('assets/contour2.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #2c3e50;
+            position: relative;
+        }
+
+        .nav {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e88e5;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tagline {
+            color: #1e88e5;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            color: #1e88e5;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-card h3 {
+            color: #1e88e5;
+            margin-bottom: 1rem;
+        }
+
+        .cta {
+            text-align: center;
+            padding: 4rem 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-button {
+            background: #1e88e5;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: #1976d2;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(30, 136, 229, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .services {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="nav">
+            <div class="logo">Simplifly</div>
+        </nav>
+
+        <section class="hero">
+            <div class="tagline">Better, Cheaper Data</div>
+            <h1>Professional Drone Services in Tennessee</h1>
+            <p>Elevating data collection with cutting-edge drone technology</p>
+        </section>
+
+        <section class="services">
+            <div class="service-card">
+                <h3>Golf Course Mapping</h3>
+                <p>High-precision aerial mapping and analysis for golf course management and maintenance</p>
+            </div>
+            <div class="service-card">
+                <h3>Land Data Collection</h3>
+                <p>Accurate topographic measurements and 3D mapping for construction and development</p>
+            </div>
+            <div class="service-card">
+                <h3>Solar Inspection</h3>
+                <p>Thermal imaging and detailed inspection of solar panel installations</p>
+            </div>
+            <div class="service-card">
+                <h3>Roof Inspection</h3>
+                <p>Comprehensive roof assessments with detailed imagery and damage detection</p>
+            </div>
+        </section>
+
+        <section class="cta">
+            <a href="mailto:info@dronelink.flights">
+  		<button class="cta-button">Get Started</button>
+	    </a>
+        </section>
+
+        <footer class="footer">
+            <p>© 2025 Simplifly. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
