@@ -9,75 +9,28 @@
         /* Use Inter font */
         body {
             font-family: 'Inter', sans-serif;
-            overflow: hidden; /* Hide scrollbars if video slightly overflows */
+            overflow: hidden; /* Hide scrollbars */
+            background-color: #212936; /* Dark background */
         }
-
-        /* Video Background Container */
-        #video-bg {
-            position: fixed; /* Fix position to cover viewport */
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            z-index: -100; /* Place behind content */
-            background-size: cover;
-            /* Optional: Add a fallback background image or color */
-            background-color: #1a202c; /* Dark fallback */
+        #canvas-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -100; display: block;
         }
-
-        /* Dark Overlay */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Adjust opacity as needed */
-            z-index: -50; /* Place above video, behind content */
-        }
-
-        /* Styling for the countdown timer numbers */
-        .timer-number {
-            font-size: 3rem; /* Larger font size for numbers (adjust as needed) */
-            font-weight: 700; /* Bold weight */
-            line-height: 1; /* Adjust line height */
-        }
-
-        /* Styling for the countdown timer labels */
-        .timer-label {
-            font-size: 0.8rem; /* Smaller font size for labels */
-            text-transform: uppercase; /* Uppercase labels */
-            letter-spacing: 0.1em; /* Add some letter spacing */
-            margin-top: 0.25rem; /* Space above label */
-        }
-
-        /* Container for each timer segment (number + label) */
-        .timer-segment {
-             min-width: 90px; /* Ensure segments have some base width */
-             text-align: center;
-        }
-
+        .timer-number { font-size: 3rem; font-weight: 700; line-height: 1; }
+        .timer-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.25rem; }
+        .timer-segment { min-width: 90px; text-align: center; }
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="text-white"> <div id="video-bg">
-        <video autoplay muted loop playsinline>
-             <source src="DroneLinkAd.mp4" type="video/mp4">
-             Your browser does not support the video tag.
-        </video>
-    </div>
-    <div class="overlay"></div>
+<body class="text-white">
+
+    <canvas id="canvas-bg"></canvas>
 
     <div class="relative z-10 flex flex-col items-center justify-center min-h-screen p-8">
-
         <h1 class="text-6xl md:text-7xl font-bold mb-5">SimpliFly</h1>
-
         <p class="text-xl md:text-2xl text-gray-300 mb-12">Updated website coming soon</p>
-
         <div id="countdown" class="flex flex-wrap justify-center items-start gap-6 md:gap-10">
             <div class="timer-segment">
                 <div id="days" class="timer-number">00</div>
@@ -96,66 +49,184 @@
                 <div class="timer-label text-gray-400">Seconds</div>
             </div>
         </div>
-
         <footer class="absolute bottom-0 left-0 right-0 p-4 text-center text-gray-500 text-sm">
             &copy; <span id="year"></span> SimpliFly. All rights reserved.
         </footer>
     </div>
 
     <script>
+    // SimpleNoise.js - https://github.com/jwagner/simplex-noise.js
+    // Copyright (c) 2018 Jonas Wagner, licensed under MIT
+    !function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t(e.SimpleNoise={})}(this,function(e){"use strict";function t(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:Math.random;this.p=new Uint8Array(256),this.perm=new Uint8Array(512),this.permMod12=new Uint8Array(512);for(var t=0;t<256;t++)this.p[t]=t;var r;for(var n=255;n>0;n--){var o=Math.floor(e()*(n+1));r=this.p[n],this.p[n]=this.p[o],this.p[o]=r}for(t=0;t<512;t++)this.perm[t]=this.p[t&255],this.permMod12[t]=this.perm[t]%12}var r=1/7,n=1/4;t.prototype={grad3:new Float32Array([1,1,0,-1,1,0,1,-1,0,-1,-1,0,1,0,1,-1,0,1,1,0,-1,-1,0,-1,0,1,1,0,-1,1,0,1,-1,0,-1,-1]),grad4:new Float32Array([0,1,1,1,0,1,1,-1,0,1,-1,1,0,1,-1,-1,0,-1,1,1,0,-1,1,-1,0,-1,-1,1,0,-1,-1,-1,1,0,1,1,1,0,1,-1,1,0,-1,1,1,0,-1,-1,-1,0,1,1,-1,0,1,-1,-1,0,-1,1,-1,0,-1,-1,1,1,0,1,1,1,0,-1,1,-1,0,1,1,-1,0,-1,-1,1,0,1,-1,1,0,-1,-1,-1,0,1,-1,-1,0,-1,1,1,1,0,1,1,-1,0,1,-1,1,0,1,-1,-1,0,-1,1,1,0,-1,1,-1,0,-1,-1,1,0,-1,-1,-1,0]),noise2D:function(e,t){var r,n,o=(e+t)*.3660254037844386,i=Math.floor(e+o),a=Math.floor(t+o),s=(i+a)*.21132486540518713,u=e-(i-s),l=t-(a-s);u>l?(r=1,n=0):(r=0,n=1);var c=u-r+.21132486540518713,f=l-n+.21132486540518713,h=u-1+.42264973081037427,p=l-1+.42264973081037427,d=i&255,m=a&255,y=.5-u*u-l*l,v=0;if(y>0){var g=3*this.permMod12[d+this.perm[m]];v=y*y*y*y*(this.grad3[g]*u+this.grad3[g+1]*l)}var x=.5-c*c-f*f,_=0;if(x>0){var w=3*this.permMod12[d+r+this.perm[m+n]];_=x*x*x*x*(this.grad3[w]*c+this.grad3[w+1]*f)}var b=.5-h*h-p*p,M=0;if(b>0){var A=3*this.permMod12[d+1+this.perm[m+1]];M=b*b*b*b*(this.grad3[A]*h+this.grad3[A+1]*p)}return 70*(v+_+M)},noise3D:function(e,t,n){var o,i,a,s,u,l,c=(e+t+n)*(1/3),f=Math.floor(e+c),h=Math.floor(t+c),p=Math.floor(n+c),d=(f+h+p)*(1/6),m=e-(f-d),y=t-(h-d),v=n-(p-d);m>=y?y>=v?(o=1,i=0,a=0,s=1,u=1,l=0):m>=v?(o=1,i=0,a=0,s=1,u=0,l=1):(o=0,i=0,a=1,s=1,u=0,l=1):y<v?(o=0,i=0,a=1,s=0,u=1,l=1):m<v?(o=0,i=1,a=0,s=0,u=1,l=1):(o=0,i=1,a=0,s=1,u=1,l=0);var x=m-o+1/6,g=y-i+1/6,_=v-a+1/6,w=m-s+2/6,b=y-u+2/6,M=v-l+2/6,A=m-1+.5,D=y-1+.5,S=v-1+.5,T=f&255,N=h&255,O=p&255,P=.6-m*m-y*y-v*v,q=0;if(P>0){var C=this.permMod12[T+this.perm[N+this.perm[O]]]*3;q=P*P*P*P*(this.grad3[C]*m+this.grad3[C+1]*y+this.grad3[C+2]*v)}var E=.6-x*x-g*g-_*_,k=0;if(E>0){var F=this.permMod12[T+o+this.perm[N+i+this.perm[O+a]]]*3;k=E*E*E*E*(this.grad3[F]*x+this.grad3[F+1]*g+this.grad3[F+2]*_)}var L=.6-w*w-b*b-M*M,I=0;if(L>0){var U=this.permMod12[T+s+this.perm[N+u+this.perm[O+l]]]*3;I=L*L*L*L*(this.grad3[U]*w+this.grad3[U+1]*b+this.grad3[U+2]*M)}var V=.6-A*A-D*D-S*S,R=0;if(V>0){var z=this.permMod12[T+1+this.perm[N+1+this.perm[O+1]]]*3;R=V*V*V*V*(this.grad3[z]*A+this.grad3[z+1]*D+this.grad3[z+2]*S)}return 32*(q+k+I+R)},noise4D:function(e,t,o,i){var a,s,u,l,c,f,h,p,d,m,y,v,x=(e+t+o+i)*.30901699437494745,g=Math.floor(e+x),_=Math.floor(t+x),w=Math.floor(o+x),b=Math.floor(i+x),M=(g+_+w+b)*.25,A=e-(g-M),D=t-(_-M),S=o-(w-M),T=i-(b-M),N=0;A>D?N++:0,A>S?N++:0,A>T?N++:0,D>S?N++:0,D>T?N++:0,S>T?N++:0;var O=A>=D?1:0,P=A>=S?1:0,q=A>=T?1:0,C=D>=S?1:0,E=D>=T?1:0,k=S>=T?1:0;a=O^P^q^1,s=O^C^E^1,u=P^C^k^1,l=q^E^k^1,c=O&P&q^1,f=O&C&E^1,h=P&C&k^1,p=q&E&k^1;var F=A-a+r,L=D-s+r,I=S-u+r,U=T-l+r,V=A-c+n,R=D-f+n,z=S-h+n,B=T-p+n,H=A-1+.5,W=D-1+.5,X=S-1+.5,Y=T-1+.5,G=g&255,J=_&255,K=w&255,Q=b&255,Z=.6-A*A-D*D-S*S-T*T,$=0;if(Z>0){var ee=this.perm[G+this.perm[J+this.perm[K+this.perm[Q]]]]%32*4;$=$*Z*Z*Z*(this.grad4[ee]*A+this.grad4[ee+1]*D+this.grad4[ee+2]*S+this.grad4[ee+3]*T)}var te=.6-F*F-L*L-I*I-U*U,re=0;if(te>0){var ne=this.perm[G+a+this.perm[J+s+this.perm[K+u+this.perm[Q+l]]]]%32*4;re=te*te*te*te*(this.grad4[ne]*F+this.grad4[ne+1]*L+this.grad4[ne+2]*I+this.grad4[ne+3]*U)}var oe=.6-V*V-R*R-z*z-B*B,ie=0;if(oe>0){var ae=this.perm[G+c+this.perm[J+f+this.perm[K+h+this.perm[Q+p]]]]%32*4;ie=oe*oe*oe*oe*(this.grad4[ae]*V+this.grad4[ae+1]*R+this.grad4[ae+2]*z+this.grad4[ae+3]*B)}var se=.6-H*H-W*W-X*X-Y*Y,ue=0;if(se>0){var le=this.perm[G+1+this.perm[J+1+this.perm[K+1+this.perm[Q+1]]]]%32*4;ue=se*se*se*se*(this.grad4[le]*H+this.grad4[le+1]*W+this.grad4[le+2]*X+this.grad4[le+3]*Y)}return 27*($+re+ie+ue)}};var o=new t;e.noise2D=function(e,t){return o.noise2D(e,t)},e.noise3D=function(e,t,r){return o.noise3D(e,t,r)},e.noise4D=function(e,t,r,n){return o.noise4D(e,t,r,n)},e.SimpleNoise=t,Object.defineProperty(e,"__esModule",{value:!0})});
+    </script>
+
+    <script>
         // --- Countdown Timer Logic ---
-
-        // 1. Set the FIXED target date (June 1st, 2025, 00:00:00)
-        // Note: JavaScript months are 0-indexed (0 = January, 5 = June)
-        const targetDate = new Date(2025, 5, 1, 0, 0, 0);
-
-        // Get elements
+        // (Same as before)
+        const targetDate = new Date(2025, 5, 1, 0, 0, 0); // June 1st, 2025
         const daysEl = document.getElementById('days');
         const hoursEl = document.getElementById('hours');
         const minutesEl = document.getElementById('minutes');
         const secondsEl = document.getElementById('seconds');
         const countdownEl = document.getElementById('countdown');
         const yearEl = document.getElementById('year');
-
-        // Set current year in footer
-        if (yearEl) {
-            yearEl.textContent = new Date().getFullYear(); // Get current year dynamically
-        }
-
-        // 2. Update countdown every second
-        const interval = setInterval(updateCountdown, 1000);
-        updateCountdown(); // Initial call
-
+        if (yearEl) yearEl.textContent = new Date().getFullYear();
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call is important
         function updateCountdown() {
             const currentTime = new Date().getTime();
             const timeDifference = targetDate - currentTime;
-
-            // 3. Calculate time parts
             if (timeDifference <= 0) {
-                clearInterval(interval);
-                if (countdownEl) {
-                    // Style the completion message to fit the new theme
-                    countdownEl.innerHTML = '<div class="text-2xl font-semibold text-green-400">Our new website is launching soon!</div>';
-                }
-                // Ensure timer elements are cleared or set to 00
-                if (daysEl) daysEl.textContent = '00';
-                if (hoursEl) hoursEl.textContent = '00';
-                if (minutesEl) minutesEl.textContent = '00';
-                if (secondsEl) secondsEl.textContent = '00';
+                clearInterval(countdownInterval);
+                if (countdownEl) countdownEl.innerHTML = '<div class="text-2xl font-semibold text-green-400">Our new website is launching soon!</div>';
+                if (daysEl) daysEl.textContent = '00'; if (hoursEl) hoursEl.textContent = '00';
+                if (minutesEl) minutesEl.textContent = '00'; if (secondsEl) secondsEl.textContent = '00';
                 return;
             }
-
             const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
             const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-            // 4. Display time, add leading zeros
             if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
             if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
             if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
             if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
         }
+
+        // --- Contour Map Canvas Animation Logic ---
+        const canvas = document.getElementById('canvas-bg');
+        let ctx;
+        let width, height;
+        let noiseGen;
+        let zOffset = 0;
+        const noiseScale = 0.005;
+        const timeScale = 0.005;
+        // *** OPTIMIZATION: Reduced number of contours ***
+        const numContours = 10; // Was 25
+        const contourInterval = 1.0 / numContours;
+        const contourColors = [
+            'rgba(255, 255, 255, 0.3)', // White
+            'rgba(156, 163, 175, 0.3)', // Grey
+            'rgba(147, 197, 253, 0.35)', // Light Blue
+            'rgba(255, 255, 255, 0.3)', // White
+            'rgba(156, 163, 175, 0.3)', // Grey
+        ];
+        const lineThickness = 1.5;
+        // *** OPTIMIZATION: Increased grid size (less detail, better performance) ***
+        const resolution = 15; // Was 10
+        let animationFrameId = null;
+
+        function init() {
+            try {
+                if (!canvas) { console.error("Canvas element not found!"); return; }
+                ctx = canvas.getContext('2d');
+                if (!ctx) { console.error("Could not get 2D context!"); return; }
+
+                if (typeof SimpleNoise === 'undefined' || typeof SimpleNoise.SimpleNoise === 'undefined') {
+                     console.error("SimpleNoise constructor not found!");
+                     if (typeof SimpleNoise === 'function') {
+                         noiseGen = new SimpleNoise();
+                     } else { return; }
+                } else {
+                    noiseGen = new SimpleNoise.SimpleNoise();
+                }
+
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                zOffset = Math.random() * 1000;
+
+                if (animationFrameId === null) {
+                    animate();
+                }
+            } catch (error) {
+                console.error("Error during initialization:", error);
+            }
+        }
+
+        function getNoiseValue(x, y, z) {
+            if (!noiseGen || typeof noiseGen.noise3D !== 'function') { return 0; }
+            return (noiseGen.noise3D(x * noiseScale, y * noiseScale, z * timeScale) + 1) / 2;
+        }
+
+        const interpolate = (p1, p2, val1, val2, level) => {
+            if (Math.abs(val1 - val2) < 1e-6) return p1;
+            const t = (level - val1) / (val2 - val1);
+            const clampedT = Math.max(0, Math.min(1, t));
+            return p1 + (p2 - p1) * clampedT;
+        };
+
+        function animate() {
+            try {
+                if (!ctx) { return; }
+
+                ctx.fillStyle = '#212936';
+                ctx.fillRect(0, 0, width, height);
+                zOffset += 1;
+                ctx.lineWidth = lineThickness;
+
+                for (let i = 0; i < numContours; i++) {
+                    const contourLevel = i * contourInterval;
+                    ctx.strokeStyle = contourColors[i % contourColors.length];
+                    ctx.beginPath();
+                    // Loop uses the updated 'resolution' value here
+                    for (let y = 0; y < height; y += resolution) {
+                        for (let x = 0; x < width; x += resolution) {
+                            const valTL = getNoiseValue(x, y, zOffset);
+                            const valTR = getNoiseValue(x + resolution, y, zOffset);
+                            const valBL = getNoiseValue(x, y + resolution, zOffset);
+                            const valBR = getNoiseValue(x + resolution, y + resolution, zOffset);
+
+                            let caseIndex = 0;
+                            if (valTL > contourLevel) caseIndex |= 8;
+                            if (valTR > contourLevel) caseIndex |= 4;
+                            if (valBR > contourLevel) caseIndex |= 2;
+                            if (valBL > contourLevel) caseIndex |= 1;
+
+                            if (caseIndex === 0 || caseIndex === 15) continue;
+
+                            const midTopX = interpolate(x, x + resolution, valTL, valTR, contourLevel);
+                            const midRightY = interpolate(y, y + resolution, valTR, valBR, contourLevel);
+                            const midBottomX = interpolate(x, x + resolution, valBL, valBR, contourLevel);
+                            const midLeftY = interpolate(y, y + resolution, valTL, valBL, contourLevel);
+
+                            // Marching squares logic (same as before)
+                            switch (caseIndex) {
+                                case 1: ctx.moveTo(x, midLeftY); ctx.lineTo(midBottomX, y + resolution); break;
+                                case 2: ctx.moveTo(midBottomX, y + resolution); ctx.lineTo(x + resolution, midRightY); break;
+                                case 3: ctx.moveTo(x, midLeftY); ctx.lineTo(x + resolution, midRightY); break;
+                                case 4: ctx.moveTo(midTopX, y); ctx.lineTo(x + resolution, midRightY); break;
+                                case 5: ctx.moveTo(x, midLeftY); ctx.lineTo(midTopX, y); ctx.moveTo(midBottomX, y + resolution); ctx.lineTo(x + resolution, midRightY); break;
+                                case 6: ctx.moveTo(midTopX, y); ctx.lineTo(midBottomX, y + resolution); break;
+                                case 7: ctx.moveTo(x, midLeftY); ctx.lineTo(midTopX, y); break;
+                                case 8: ctx.moveTo(x, midLeftY); ctx.lineTo(midTopX, y); break;
+                                case 9: ctx.moveTo(midTopX, y); ctx.lineTo(midBottomX, y + resolution); break;
+                                case 10: ctx.moveTo(midTopX, y); ctx.lineTo(x + resolution, midRightY); ctx.moveTo(x, midLeftY); ctx.lineTo(midBottomX, y + resolution); break;
+                                case 11: ctx.moveTo(midTopX, y); ctx.lineTo(x + resolution, midRightY); break;
+                                case 12: ctx.moveTo(x, midLeftY); ctx.lineTo(x + resolution, midRightY); break;
+                                case 13: ctx.moveTo(x, midLeftY); ctx.lineTo(midBottomX, y + resolution); break;
+                                case 14: ctx.moveTo(midBottomX, y + resolution); ctx.lineTo(x + resolution, midRightY); break;
+                            }
+                        }
+                    }
+                    ctx.stroke();
+                }
+                animationFrameId = requestAnimationFrame(animate);
+            } catch (error) {
+                console.error("Error during animation loop:", error);
+                if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; }
+            }
+        }
+
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            if (animationFrameId) { cancelAnimationFrame(animationFrameId); animationFrameId = null; }
+            resizeTimeout = setTimeout(init, 100);
+        });
+
+        // Initialize after the page loads
+        window.addEventListener('load', init);
+
     </script>
 
 </body>
